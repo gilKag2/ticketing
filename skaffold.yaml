@@ -6,9 +6,9 @@ deploy:
       - ./infra/k8s/*
 build:
   googleCloudBuild:
-    projectId: ticketing-dev-345919
+    projectId: psychic-cascade-354914
   artifacts:
-    - image: us.gcr.io/ticketing-dev-345919/auth
+    - image: us.gcr.io/psychic-cascade-354914/auth
       context: auth
       docker:
         dockerfile: Dockerfile
@@ -16,7 +16,7 @@ build:
         manual:
           - src: src/**/*.ts
             dest: .
-    - image: us.gcr.io/ticketing-dev-345919/client
+    - image: us.gcr.io/psychic-cascade-354914/client
       context: client
       docker:
         dockerfile: Dockerfile
@@ -24,7 +24,7 @@ build:
         manual:
           - src: "**/*.js"
             dest: .
-    - image: us.gcr.io/ticketing-dev-345919/tickets
+    - image: us.gcr.io/psychic-cascade-354914/tickets
       context: tickets
       docker:
         dockerfile: Dockerfile
