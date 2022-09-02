@@ -4,10 +4,10 @@ import { json } from "body-parser";
 import cookieSession from "cookie-session";
 
 import { errorHandler, NotFoundError, currentUser } from "@gil-tickets/common";
-import { CreateTicketRouter } from "./routes/new";
-import { ShowTicketRouter } from "./routes/show";
-import { IndexTicketRouter } from "./routes/index";
-import { UpdateTicketRouter } from "./routes/update";
+import { NewOrderRouter } from "./routes/new";
+import { DeleteOrderRouter } from "./routes/delete";
+import { IndexOrderRouter } from "./routes";
+import { ShowOrderRouter } from "./routes/show";
 
 const app = express();
 app.set("trust proxy", true);
@@ -19,10 +19,12 @@ app.use(
   })
 );
 app.use(currentUser);
-app.use(CreateTicketRouter);
-app.use(ShowTicketRouter);
-app.use(IndexTicketRouter);
-app.use(UpdateTicketRouter);
+
+app.use(NewOrderRouter);
+app.use(DeleteOrderRouter);
+app.use(IndexOrderRouter);
+app.use(ShowOrderRouter);
+
 app.all("*", async () => {
   throw new NotFoundError();
 });

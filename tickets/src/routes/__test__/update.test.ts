@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import request from "supertest";
 import { app } from "../../app";
+import { Ticket } from "../../models/ticket";
 import { natsWrapper } from "../../nats-wrapper";
 
 describe("tests with authentication", () => {
@@ -82,6 +83,25 @@ describe("tests with authentication", () => {
       .expect(200);
 
     expect(natsWrapper.client.publish).toHaveBeenCalled();
+  });
+
+  it("rejected update if the ticket is reserved", async () => {
+    const response = await request(app)
+      .post("/api/tickets")
+      .set("Cookie", cookie)
+      .send({ title: "ok", price: 20 });
+
+    const ticket = await Ticket.findById(response.body.id);
+
+    ticket!.set({ orderId: new mongoose.Types.ObjectId().toHexString() });
+
+    await ticket!.save();
+
+    await request(app)
+      .put(`/api/tickets/${response.body.id}`)
+      .set("Cookie", cookie)
+      .send({ title: "new title", price: 100 })
+      .expect(400);
   });
 });
 
